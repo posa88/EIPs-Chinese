@@ -1,6 +1,6 @@
 ---
 eip: 55
-title: Mixed-case checksum address encoding
+title: 混合大小写校验地址编码
 author: Vitalik Buterin
 type: Standards Track
 category: ERC
@@ -8,9 +8,9 @@ status: Final
 created: 2016-01-14
 ---
 
-# Specification
+# 规范
 
-Code:
+代码:
 
 ``` python
 from ethereum import utils
@@ -35,18 +35,18 @@ test('0xD1220A0cf47c7B9Be7A2E6BA89F429762e7b9aDb')
 
 ```
 
-In English, convert the address to hex, but if the `i`th digit is a letter (ie. it's one of `abcdef`) print it in uppercase if the `4*i`th bit of the hash of the lowercase hexadecimal address is 1 otherwise print it in lowercase.
+在英文里，将地址转换为十六进制，但如果第`i`位是一个字母(即是`abcdef`中的一个)，那么如果小写的十六进制地址的哈希值的第`4*i`位是1则用大写打印，否则用小写。
 
-# Rationale
+# 基本原理
 
-Benefits:
-- Backwards compatible with many hex parsers that accept mixed case, allowing it to be easily introduced over time
-- Keeps the length at 40 characters
-- On average there will be 15 check bits per address, and the net probability that a randomly generated address if mistyped will accidentally pass a check is 0.0247%. This is a ~50x improvement over ICAP, but not as good as a 4-byte check code.
+好处:
+- 向后兼容许多接受混合大小写的十六进制解析器，允许随着时间的推移很容易地引入它。
+- 保持长度在40字符。
+- 平均每个地址有15个检查位，如果输入错误，随机生成的地址意外通过检查的概率是0.0247%。这是对ICAP的一个~50倍的改进，但不如一个4字节的校验码好。
 
-# Implementation
+# 实现
 
-In javascript:
+使用javascript:
 
 ```js
 const createKeccakHash = require('keccak')
@@ -73,31 +73,31 @@ function toChecksumAddress (address) {
 '0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359'
 ```
 
-Note that the input to the Keccak256 hash is the lowercase hexadecimal string (i.e. the hex address encoded as ASCII):
+注意Keccak256哈希函数的输入是小写十六进制字符串(即用ASCII编码的十六进制地址):
 
 ```
     var hash = createKeccakHash('keccak256').update(Buffer.from(address.toLowerCase(), 'ascii')).digest()
 ```
 
-# Test Cases
+# 测试用例
 
 ```
-# All caps
+# 全大写
 0x52908400098527886E0F7030069857D2E4169EE7
 0x8617E340B3D01FA5F11F306F4090FD50E238070D
-# All Lower
+# 全小写
 0xde709f2102306220921060314715629080e2fb77
 0x27b1fdb04752bbc536007a920d24acb045561c26
-# Normal
+# 正常
 0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed
 0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359
 0xdbF03B407c01E7cD3CBea99509d93f8DDDC8C6FB
 0xD1220A0cf47c7B9Be7A2E6BA89F429762e7b9aDb
 ```
 
-# Adoption
+# 采用
 
-| Wallet                   | displays checksummed addresses | rejects invalid mixed-case | rejects too short | rejects too long |
+| 钱包                     | 展示校验的地址                   | 拒绝无效的混合大小写编码地址   | 拒绝过短地址        | 拒绝过长地址       |
 |--------------------------|--------------------------------|----------------------------|-------------------|------------------|
 | Etherwall 2.0.1          | Yes                            | Yes                        | Yes               | Yes              |
 | Jaxx 1.2.17              | No                             | Yes                        | Yes               | Yes              |
@@ -108,9 +108,9 @@ Note that the input to the Keccak256 hash is the lowercase hexadecimal string (i
 | Jaxx Liberty 2.0.0       | Yes                            | Yes                        | Yes               | Yes              |
 | Coinomi 1.10             | Yes                            | Yes                        | Yes               | Yes              |
 
-### Exchange support for mixed-case address checksums, as of 2017-05-27:
+### 交易所对混合大小写校验地址的支持，更新到2017-05-27:
 
-| Exchange     | displays checksummed deposit addresses | rejects invalid mixed-case | rejects too short | rejects too long |
+| 交易所        | 展示校验的充值地址                       | 拒绝无效的混合大小写编码地址   | 拒绝过短地址        | 拒绝过长地址       |
 |--------------|----------------------------------------|----------------------------|-------------------|------------------|
 | Bitfinex     | No                                     | Yes                        | Yes               | Yes              |
 | Coinbase     | Yes                                    | No                         | Yes               | Yes              |
@@ -119,10 +119,10 @@ Note that the input to the Keccak256 hash is the lowercase hexadecimal string (i
 | Poloniex     | No                                     | No                         | Yes               | Yes              |
 | Shapeshift   | No                                     | No                         | Yes               | Yes              |
 
-# References
+# 引用
 
-1. EIP 55 issue and discussion https://github.com/ethereum/eips/issues/55
-2. Python example by @Recmo https://github.com/ethereum/eips/issues/55#issuecomment-261521584
-3. Python implementation in [`ethereum-utils`](https://github.com/pipermerriam/ethereum-utils#to_checksum_addressvalue---text)
-4. Ethereumjs-util implementation https://github.com/ethereumjs/ethereumjs-util/blob/75f529458bc7dc84f85fd0446d0fac92d991c262/index.js#L452-L466
-5. Swift implementation in [`EthereumKit`](https://github.com/yuzushioh/EthereumKit/blob/master/EthereumKit/Helper/EIP55.swift)
+1. EIP 55 问题和讨论 https://github.com/ethereum/eips/issues/55
+2. @Recmo 报告的Python例子  https://github.com/ethereum/eips/issues/55#issuecomment-261521584
+3. Python 实现，在[`ethereum-utils`](https://github.com/pipermerriam/ethereum-utils#to_checksum_addressvalue---text)
+4. Ethereumjs-util 实现 https://github.com/ethereumjs/ethereumjs-util/blob/75f529458bc7dc84f85fd0446d0fac92d991c262/index.js#L452-L466
+5. Swift实现，在[`EthereumKit`](https://github.com/yuzushioh/EthereumKit/blob/master/EthereumKit/Helper/EIP55.swift)
